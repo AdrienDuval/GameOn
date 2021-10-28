@@ -531,9 +531,13 @@ footer {
 
 p.error-msg {
   font-size: 15px;
-  font-weight: 600;
-  color: red;
+  font-weight: 100;
+  color: #c74949;
 }
 .hidden {
   display: none;
+}
+
+div#reception-msg h2 {
+  margin: 300px 0;
 }
