@@ -15,6 +15,7 @@ var modalbg = document.querySelector(".bground");
 var modalBtn = document.querySelectorAll(".modal-btn");
 var formData = document.querySelectorAll(".formData");
 var isFormValid = false;
+var radioButton = document.getElementsByName("location");
 
 var id = function id(_id) {
   return document.getElementById(_id);
@@ -27,6 +28,7 @@ var nameInput = id("first"),
     quantityInput = id("quantity"),
     locatiionsInput = id("locations"),
     checkBox = id('checkbox1'),
+    submitBtn = id('submit-btn'),
     form = id('form'),
     receptionMsg = id('reception-msg'),
     closeBtn = id('close-btn'),
@@ -54,13 +56,51 @@ var validateNameInput = function validateNameInput(id, serial, message) {
     errorMsg[serial].innerHTML = '';
     isFormValid = true;
   }
+};
+
+var validatesBirthdateInput = function validatesBirthdateInput() {
+  if (!birthdateInput.value) {
+    errorMsg[3].innerHTML = "You enter a valide date";
+  } else {
+    errorMsg[3].innerHTML = "";
+    isFormValid = true;
+  }
+};
+
+var validateCheckboxes = function validateCheckboxes() {
+  checkBox.addEventListener('change', function ($event) {
+    if (!$event.target.checked) {
+      errorMsg[6].innerHTML = "You must check to agree to terms and conditions.";
+      submitBtn.setAttribute("disabled", "true");
+    } else {
+      errorMsg[6].innerHTML = "";
+      isFormValid = true;
+      submitBtn.removeAttribute("disabled");
+    }
+  });
+};
+
+var validateRadioBox = function validateRadioBox() {
+  for (var i = 0; i < radioButton.length; i++) {
+    var rdoButton = radioButton[i];
+
+    if (!rdoButton.checked) {
+      errorMsg[5].innerHTML = "You must choose one option.";
+      isFormValid = false;
+    } else {
+      errorMsg[5].innerHTML = "";
+    }
+  }
 }; // action taken by form in submit checking if all inputs are corrects and diplaying the reception message
 
 
 form.addEventListener('submit', function (e) {
   e.preventDefault(); // on submit its checks and validates only the firts name box 
 
-  validateNameInput(nameInput, 0, 'Please enter 2+ characters for name field.'); // condition for displaying the form if the inputs are check and are correct
+  validateNameInput(nameInput, 0, 'Please enter 2+ characters for name field.');
+  validateCheckboxes();
+  validateRadioBox();
+  validatesBirthdateInput(); // condition for displaying the form if the inputs are check and are correct
 
   if (isFormValid) {
     form.remove();
@@ -70,6 +110,12 @@ form.addEventListener('submit', function (e) {
 
 nameInput.addEventListener('input', function () {
   validateNameInput(nameInput, 0, 'Please enter 2+ characters for name field.');
+});
+checkBox.addEventListener('input', function () {
+  validateCheckboxes();
+});
+birthdateInput.addEventListener('input', function () {
+  validatesBirthdateInput();
 });
 closeBtn.addEventListener('click', function () {
   modalbg.style.display = "none";
